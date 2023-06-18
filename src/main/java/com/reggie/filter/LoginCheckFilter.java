@@ -1,6 +1,7 @@
 package com.reggie.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.reggie.common.BaseContext;
 import com.reggie.common.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
@@ -52,6 +53,11 @@ public class LoginCheckFilter implements Filter{
         //4、判断登录状态，如果已登录，则直接放行
         if(request.getSession().getAttribute("employee") != null){
             log.info("用户已登录，用户id为：{}",request.getSession().getAttribute("employee"));
+
+            //将用户id存入到ThreadLocal中
+            Long id = (Long) request.getSession().getAttribute("employee");
+            BaseContext.setCurrentId(id);
+
             filterChain.doFilter(request,response);
             return;
         }
@@ -77,5 +83,14 @@ public class LoginCheckFilter implements Filter{
             }
         }
         return false;
+    }
+
+
+    /**
+     * 线程结束结束当前线程资源 避免资源泄露
+     */
+    @Override
+    public void destroy() {
+        BaseContext.remove();
     }
 }
