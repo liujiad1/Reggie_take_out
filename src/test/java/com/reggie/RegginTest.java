@@ -45,24 +45,6 @@ public class RegginTest {
 //    }
 
 
-    @Test
-    public void test2(){
-        Employee employee = new Employee();
-        employee.setUsername("test5");
-        employee.setName("test10");
-        employee.setPassword("123456");
-        employee.setPhone("17673496515");
-        employee.setIdNumber("430623200107018336");
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setSex("1");
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setCreateUser(1L);
-        employee.setUpdateUser(1L);
 
-        employeeMapper.insert(employee);
-        System.out.println(employee.getId());
-
-
-    }
 
 }
