@@ -1,6 +1,6 @@
 package com.reggie;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
+
 import com.reggie.entity.Employee;
 import com.reggie.mapper.EmployeeMapper;
 import com.reggie.service.EmployeeService;
@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
 
 @SpringBootTest
 public class RegginTest {

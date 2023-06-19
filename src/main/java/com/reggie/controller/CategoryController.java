@@ -39,4 +39,15 @@ public class CategoryController {
     }
 
 
+    /**
+     * 根据ID删除分类套餐信息
+     * @param id
+     * @return
+     */
+    @DeleteMapping
+    public R<String> deleteById(Long id){
+        return categoryService.deleteById(id);
+    }
+
+
 }

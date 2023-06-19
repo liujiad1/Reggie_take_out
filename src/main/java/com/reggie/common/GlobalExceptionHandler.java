@@ -1,6 +1,7 @@
 package com.reggie.common;
 
 
+import com.reggie.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,5 +26,17 @@ public class GlobalExceptionHandler {
     public R<String> test(ArithmeticException e){
         log.error(e.getMessage());
         return R.error("出错了！");
+    }
+
+
+    /**
+     * 分类关联异常
+     * @param c
+     * @return
+     */
+    @ExceptionHandler(CustomException.class)
+    public R<String> exceptionHandler(CustomException c){
+        log.error("异常信息：{}",c.getMessage());
+        return R.error(c.getMessage());
     }
 }

@@ -16,4 +16,7 @@ public interface CategoryService extends IService<Category> {
 
     //分类列表查询
     R<Page> pageSelect(int page,int pageSize);
+
+    //根据ID删除分类
+    R<String> deleteById( Long id);
 }
