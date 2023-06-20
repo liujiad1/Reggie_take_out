@@ -24,3 +24,7 @@ mybatis-plus:
   mapper-locations: classpath:mapper/*Mapper.xml
   #扫描实体类 别名
   type-aliases-package: com.reggie.entity
+
+#图片文件存储地址
+Reggie:
+  path: E:\temp\img\
