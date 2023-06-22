@@ -12,6 +12,8 @@ spring:
       password: root
 
 mybatis-plus:
+  mapper-locations: classpath:mapper/*Mapper.xml  #SQL文件配置路径
+  type-aliases-package: com.reggie.entity #包别名扫描
   configuration:
     #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
     map-underscore-to-camel-case: true
@@ -20,10 +22,6 @@ mybatis-plus:
     db-config:
       #主键自增策略
       id-type: ASSIGN_ID
-  #SQL文件
-  mapper-locations: classpath:mapper/*Mapper.xml
-  #扫描实体类 别名
-  type-aliases-package: com.reggie.entity
 
 #图片文件存储地址
 Reggie:

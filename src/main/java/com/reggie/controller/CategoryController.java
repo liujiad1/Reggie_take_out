@@ -7,6 +7,8 @@ import com.reggie.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 分类管理
  */
@@ -47,6 +49,16 @@ public class CategoryController {
     @DeleteMapping
     public R<String> deleteById(Long id){
         return categoryService.deleteById(id);
+    }
+
+    /**
+     * 根据分类表的 类型 查询出所有菜品信息
+     * @param type
+     * @return
+     */
+    @GetMapping("/list")
+    public R<List<Category>> list(int type){
+        return categoryService.list(type);
     }
 
 

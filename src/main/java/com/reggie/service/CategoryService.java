@@ -6,6 +6,8 @@ import com.reggie.common.R;
 import com.reggie.entity.Category;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 /**
  * 分类
  */
@@ -19,4 +21,7 @@ public interface CategoryService extends IService<Category> {
 
     //根据ID删除分类
     R<String> deleteById( Long id);
+
+    //根据类型查询所有菜品类型名称
+    R<List<Category>> list(int type);
 }

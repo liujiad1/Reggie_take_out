@@ -92,4 +92,22 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         categoryMapper.deleteById(id);
         return R.success("删除成功!");
     }
+
+    /**
+     * 根据分类表的 类型 查询出所有菜品信息
+     * @param type
+     * @return
+     */
+    @Override
+    public R<List<Category>> list(int type) {
+
+        LambdaQueryWrapper<Category> lqw = new LambdaQueryWrapper<>();
+
+        lqw.eq(Category::getType,type).orderByAsc(Category::getSort);
+
+        List<Category> categoryList = categoryMapper.selectList(lqw);
+
+
+        return R.success(categoryList);
+    }
 }
