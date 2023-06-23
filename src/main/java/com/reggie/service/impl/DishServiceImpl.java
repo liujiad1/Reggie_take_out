@@ -12,10 +12,10 @@ import com.reggie.entity.Employee;
 import com.reggie.mapper.CategoryMapper;
 import com.reggie.mapper.DishFlavorMapper;
 import com.reggie.mapper.DishMapper;
+import com.reggie.service.DishFlavorService;
 import com.reggie.service.DishService;
 import com.reggie.vo.DishVo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +40,9 @@ public class DishServiceImpl extends ServiceImpl<DishMapper,Dish> implements Dis
 
     @Autowired
     private CategoryMapper categoryMapper;
+
+    @Autowired
+    private DishFlavorService dishFlavorService;
 
     /**
      * 新增菜品信息
@@ -82,10 +85,10 @@ public class DishServiceImpl extends ServiceImpl<DishMapper,Dish> implements Dis
         Page<DishVo> dishVoPage = new Page<>();
 
         LambdaQueryWrapper<Dish> lqw = new LambdaQueryWrapper<>();
-        //添加过滤条件
-        lqw.like(name != null,Dish::getName,name);
-        //添加排序条件
-        lqw.orderByDesc(Dish::getUpdateTime);
+        //添加过滤条件  添加排序条件
+        lqw.like(name != null,Dish::getName,name).orderByDesc(Dish::getUpdateTime);
+
+//        lqw.orderByDesc(Dish::getUpdateTime);
 
         //执行分页查询
         dishMapper.selectPage(pageInfo,lqw);
@@ -116,7 +119,66 @@ public class DishServiceImpl extends ServiceImpl<DishMapper,Dish> implements Dis
 
         dishVoPage.setRecords(dishVos);
 
-
         return R.success(dishVoPage);
+    }
+
+
+    /**
+     * 根据菜品id查询菜品信息和口味信息
+     * @param id
+     * @return
+     */
+    @Override
+    public DishVo getByIdWithFlavor(Long id) {
+
+        //菜品基本信息
+        Dish dish = dishMapper.selectById(id);
+        log.info("菜品基本信息{}",dish);
+
+        //根据id查询口味信息
+        LambdaQueryWrapper<DishFlavor> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(DishFlavor::getDishId,dish.getId());
+
+        List<DishFlavor> dishFlavors = dishFlavorMapper.selectList(lqw);
+        log.info("菜品口味信息{}",dishFlavors);
+
+        DishVo dishVo = new DishVo();
+        BeanUtils.copyProperties(dish,dishVo);
+        dishVo.setFlavors(dishFlavors);
+        log.info("菜品VO信息{}",dishVo);
+
+        return dishVo;
+    }
+
+    @Transactional
+    @Override
+    public void updateWithFlavor(DishDto dishDto) {
+
+
+
+
+
+        //更新菜品信息 先删除 后添加
+        LambdaQueryWrapper<DishFlavor> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(DishFlavor::getDishId,dishDto.getId());
+        //删除
+        dishFlavorMapper.delete(lqw);
+
+        //批量保存
+        List<DishFlavor> dishFlavors = dishDto.getFlavors();
+        log.info("口味信息{}",dishFlavors);
+        //设置口味表的菜品ID
+        for (DishFlavor dishFlavor : dishFlavors){
+            dishFlavor.setDishId(dishDto.getId());
+        }
+        //批量保存
+        dishFlavorService.saveBatch(dishDto.getFlavors());
+
+        //更新菜品基本信息
+        dishMapper.updateById(dishDto);
+
+
+
+
     }
 }

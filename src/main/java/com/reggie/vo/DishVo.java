@@ -2,11 +2,14 @@ package com.reggie.vo;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.reggie.entity.DishFlavor;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 菜品信息分页查询数据
@@ -26,7 +29,12 @@ public class DishVo implements Serializable {
     //菜品分类id
     private Long categoryId;
 
+    //分类名称
     private String categoryName;
+
+
+    //口味
+    private List<DishFlavor> flavors = new ArrayList<>();
 
 
     //菜品价格
@@ -38,6 +46,8 @@ public class DishVo implements Serializable {
     //0 停售 1 起售
     private Integer status;
 
+    //描述信息
+    private String description;
 
 
 
