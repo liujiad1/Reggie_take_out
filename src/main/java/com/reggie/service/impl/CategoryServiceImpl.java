@@ -46,6 +46,12 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
 
+    /**
+     * 分页查询
+     * @param page
+     * @param pageSize
+     * @return
+     */
     @Override
     public R<Page> pageSelect(int page, int pageSize) {
 
