@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.reggie.mapper.DishMapper">
+
+    <!-- 菜品停售 status = 0 -->
+    <update id="updateStatus">
+        update dish
+        <set>
+            <if test="status == 0 || status == 1">
+                status = #{status}
+            </if>
+        </set>
+
+        where id = #{ids}
+    </update>
+
+    <!-- 批量启售 -->
+    <update id="batchUpdateStatus1">
+        update dish
+        <set>
+            <if test="status == 0 || status == 1">
+                status = #{status}
+            </if>
+        </set>
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>
