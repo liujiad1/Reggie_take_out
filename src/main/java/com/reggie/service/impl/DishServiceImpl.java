@@ -1,6 +1,7 @@
 package com.reggie.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.injector.methods.UpdateById;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.reggie.common.R;
@@ -153,11 +154,6 @@ public class DishServiceImpl extends ServiceImpl<DishMapper,Dish> implements Dis
     @Transactional
     @Override
     public void updateWithFlavor(DishDto dishDto) {
-
-
-
-
-
         //更新菜品信息 先删除 后添加
         LambdaQueryWrapper<DishFlavor> lqw = new LambdaQueryWrapper<>();
         lqw.eq(DishFlavor::getDishId,dishDto.getId());
@@ -176,9 +172,57 @@ public class DishServiceImpl extends ServiceImpl<DishMapper,Dish> implements Dis
 
         //更新菜品基本信息
         dishMapper.updateById(dishDto);
+    }
+
+    /**
+     * 菜品停售
+     * @param ids
+     * @return
+     */
+    @Override
+    public R<String> dishUpdateStatus0(Long ids) {
+        int status = 0;
+        dishMapper.updateStatus(ids,status);
+
+        return R.success("修改成功！");
+    }
+
+    /**
+     * 菜品停售
+     * @param ids
+     * @return
+     */
+    @Override
+    public R<String> dishUpdateStatus1(Long ids) {
+        int status = 1;
+        dishMapper.updateStatus(ids,status);
+
+        return R.success("修改成功！");
+    }
 
 
+    /**
+     * 批量停售
+     * @param ids
+     * @return
+     */
+    @Override
+    public R<String> batchUpdateStatus0(List<Long> ids) {
 
+        List<Dish> dishes = dishMapper.selectBatchIds(ids);
+        for(Dish dish : dishes){
+            dish.setStatus(0);
+        }
 
+        this.updateBatchById(dishes);
+
+        return R.success("修改成功！");
+    }
+
+    @Override
+    public R<String> batchUpdateStatus1(List<Long> ids) {
+        int status = 1;
+        dishMapper.batchUpdateStatus1(status,ids);
+        return R.success("修改成功！");
     }
 }

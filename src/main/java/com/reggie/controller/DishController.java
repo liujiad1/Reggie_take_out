@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 菜品管理
  */
@@ -68,6 +70,51 @@ public class DishController {
         dishService.updateWithFlavor(dishDto);
         return R.success("修改菜品成功");
     }
+
+//    /**
+//     * 菜品停售 status = 0
+//     * @param ids
+//     * @return
+//     */
+//    @PostMapping("/status/0")
+//    public R<String> dishUpdateStatus0(Long ids){
+//        return dishService.dishUpdateStatus0(ids);
+//    }
+//
+//
+//    /**
+//     * 菜品启售 status = 1
+//     * @param ids
+//     * @return
+//     */
+//    @PostMapping("/status/0")
+//    public R<String> dishUpdateStatus1(Long ids){
+//        return dishService.dishUpdateStatus1(ids);
+//    }
+
+
+    /**
+     * 批量停售
+     * @param ids
+     * @return
+     */
+    @PostMapping("/status/0")
+    public R<String> batchUpdateStatus0(@RequestParam List<Long> ids){
+        return dishService.batchUpdateStatus0(ids);
+    }
+
+
+    /**
+     * 批量启售
+     * @param ids
+     * @return
+     */
+    @PostMapping("/status/1")
+    public R<String> batchUpdateStatus1(@RequestParam List<Long> ids){
+        return dishService.batchUpdateStatus1(ids);
+    }
+
+
 
 
 
