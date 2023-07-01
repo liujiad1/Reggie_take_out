@@ -10,6 +10,7 @@ import com.reggie.entity.Category;
 import com.reggie.entity.Dish;
 import com.reggie.entity.DishFlavor;
 import com.reggie.entity.Employee;
+import com.reggie.exception.CustomException;
 import com.reggie.mapper.CategoryMapper;
 import com.reggie.mapper.DishFlavorMapper;
 import com.reggie.mapper.DishMapper;
@@ -224,5 +225,30 @@ public class DishServiceImpl extends ServiceImpl<DishMapper,Dish> implements Dis
         int status = 1;
         dishMapper.batchUpdateStatus1(status,ids);
         return R.success("修改成功！");
+    }
+
+    /**
+     * 菜品删除
+     * @param ids
+     * @return
+     */
+    @Override
+    public R<String> deleteDish(List<Long> ids) {
+        //当前正在出售的菜品不能被删除
+        LambdaQueryWrapper<Dish> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(Dish::getStatus,1);
+        lqw.in(Dish::getId,ids);
+
+        Integer count = dishMapper.selectCount(lqw);
+        if(count > 0){
+            throw new CustomException("当前菜品正在售卖，请停售后删除！");
+        }
+
+        //如果菜品存在于套餐中也不能删除... 省略
+
+        //可以删除
+        dishMapper.deleteBatchIds(ids);
+
+        return R.success("删除成功！");
     }
 }

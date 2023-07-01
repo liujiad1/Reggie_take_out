@@ -114,6 +114,18 @@ public class DishController {
         return dishService.batchUpdateStatus1(ids);
     }
 
+    /**
+     * 菜品删除
+     * @param ids
+     * @return
+     */
+    @DeleteMapping
+    public R<String> deleteDish(@RequestParam List<Long> ids){
+        return dishService.deleteDish(ids);
+    }
+
+
+
 
 
 

@@ -1,9 +1,11 @@
 package com.reggie.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.reggie.common.R;
 import com.reggie.entity.Category;
 import com.reggie.service.CategoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +14,7 @@ import java.util.List;
 /**
  * 分类管理
  */
+@Slf4j
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
@@ -51,14 +54,33 @@ public class CategoryController {
         return categoryService.deleteById(id);
     }
 
+//    /**
+//     * 根据分类表的 类型 查询出所有菜品信息
+//     * @param type
+//     * @return
+//     */
+//    @GetMapping("/list")
+//    public R<List<Category>> list(int type){
+//        return categoryService.list(type);
+//    }
+
     /**
-     * 根据分类表的 类型 查询出所有菜品信息
-     * @param type
+     * 根据条件查询分类数据
+     * @param category
      * @return
      */
     @GetMapping("/list")
-    public R<List<Category>> list(int type){
-        return categoryService.list(type);
+    public R<List<Category>> list(Category category){
+        log.info("条件查询参数：{}",category);
+        //条件构造器
+        LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
+        //添加条件
+        queryWrapper.eq(category.getType() != null,Category::getType,category.getType());
+        //添加排序条件
+        queryWrapper.orderByAsc(Category::getSort).orderByDesc(Category::getUpdateTime);
+
+        List<Category> list = categoryService.list(queryWrapper);
+        return R.success(list);
     }
 
 

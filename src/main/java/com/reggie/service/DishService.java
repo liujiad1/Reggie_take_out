@@ -38,4 +38,7 @@ public interface DishService extends IService<Dish> {
 
     //批量启售
     R<String> batchUpdateStatus1(List<Long> ids);
+
+    //删除菜品
+    R<String> deleteDish(List<Long> ids);
 }
